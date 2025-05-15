@@ -1,10 +1,10 @@
 <template>
     <div class="form-container">
         <div class="information-form">
-            <div><LongForm v-model="message" placeholder="Firstname"/></div>
-            <div><LongForm v-model="message" placeholder="Lastname"/></div>
-            <div><LongForm v-model="message" placeholder="Phone Number"/></div>
-            <div><LongForm v-model="message" placeholder="Email"/></div>
+            <div><LongForm v-model="firstname" placeholder="Firstname" icon="account_circle"/></div>
+            <div><LongForm v-model="lastname" placeholder="Lastname" icon="account_circle"/></div>
+            <div><LongForm v-model="phone" placeholder="Phone Number" icon="call"/></div>
+            <div><LongForm v-model="email" placeholder="Email" icon=""/></div>
         </div>
 
         <div class="sex-form">
@@ -16,6 +16,10 @@
         <div class="address-form">
             <div><LongForm v-model="message" text="Address"/></div>
         </div>
+
+        <div><MediumForm/></div>
+
+        <div><LongButton v-model="message" text="Next"/></div>
     </div>
 </template>
 
@@ -23,7 +27,14 @@
 
 import { ref } from 'vue'
 import LongForm from './components/form/LongForm.vue'
+import MediumForm from './components/form/MediumForm.vue'
 import ShortForm from './components/form/ShortForm.vue'
+import LongButton from './components/form/LongButton.vue'
+
+const firstname = ref('')
+const lastname = ref('')
+const phone = ref('')
+const email = ref('')
 
 const message = ref('')
 
@@ -53,4 +64,5 @@ const message = ref('')
         display: flex;
         justify-content: space-between;
     }
+
 </style>
