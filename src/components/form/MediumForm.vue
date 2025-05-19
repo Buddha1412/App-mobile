@@ -2,59 +2,71 @@
 <div class="address-form-container">
     <div class="address-form-1">
         <div>
-            <select v-model="selectedProvince" @change="loadDistricts">
-                <option disabled value="">ffrgsrg</option>
-                <option v-for="province in provinces" :key="province" :value="province">
-                    {{ province.name_th }}
-                </option>
-            </select>
+            <div class="sex-text"><p>Province</p></div>
+            <div>
+                <select v-model="selectedProvince" @change="loadDistricts">
+                    <option disabled value="">Select Province</option>
+                    <option v-for="province in provinces" :key="province" :value="province">
+                        {{ province.name_th }}
+                    </option>
+                </select>
+            </div>
         </div>
 
         <div>
-            <select v-model="selectedDistrict" @change="loadSubdistricts" :disable="!selectedProvince">
-                <option disabled value="">จตุจักร</option>
-                <option v-for="district in districts" :key="district" :value="district">
-                    {{ district.name_th }}
-                </option>
-            </select>
+            <div class="sex-text"><p>District</p></div>
+            <div>
+                <select v-model="selectedDistrict" @change="loadSubdistricts" :disabled="!selectedProvince">
+                    <option disabled value="">Select District</option>
+                    <option v-for="district in districts" :key="district" :value="district">
+                        {{ district.name_th }}
+                    </option>
+                </select>
+            </div>
         </div>
     </div>
 
     <div class="address-form-2">
         <div>
-            <select v-model="selectedSubdistrict" :disabled="!selectedDistrict">
-                <option disabled value="">ลาดยาว</option>
-                <option v-for="subdistrict in subdistricts" :key="subdistrict" :value="subdistrict">
-                    {{ subdistrict.name_th }}
-                </option>
-            </select>
+            <div class="sex-text"><p>Sub-District</p></div>
+            <div>
+                <select v-model="selectedSubdistrict" :disabled="!selectedDistrict">
+                    <option disabled value="">Select Subdistrict</option>
+                    <option v-for="subdistrict in subdistricts" :key="subdistrict" :value="subdistrict">
+                        {{ subdistrict.name_th }}
+                    </option>
+                </select>
+            </div>
         </div>
 
-        <div class="medium-form">
-            <div>
-                <input
-                    type="text"
-                    v-model="postalCode"
-                    @input="onInput"
-                    maxlength="5"
-                    pattern="\d{5}"
-                    inputmode="numeric"
-                >     
-            </div>   
+        <div>
+            <div class="sex-text"><p>Postal Code</p></div>
+            <div class="medium-form">
+                <div>
+                    <input
+                        type="text"
+                        v-model="postalCode"
+                        @input="onInput"
+                        maxlength="5"
+                        pattern="\d{5}"
+                        inputmode="numeric"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 </div>
 </template>
 
 <script setup>
-
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 
-const selectedProvince = ref("");
-const selectedDistrict = ref("");
-const selectedSubdistrict = ref("");
-const postalCode = ref("");
+
+const selectedProvince = ref('');
+const selectedDistrict = ref('');
+const selectedSubdistrict = ref('');
+const postalCode = ref('');
 
 const provinces = ref([]);
 const districts = ref([]);
@@ -62,10 +74,12 @@ const subdistricts = ref([]);
 
 async function fetchProvinces() {
     try {
-        const response = await axios.get('https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json');
+        const response = await axios.get(
+            'https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province_with_amphure_tambon.json'
+        );
         provinces.value = response.data;
     } catch (error) {
-        console.error("Error fetching provinces:", error);
+        console.error('Error fetching provinces:', error);
     }
 }
 
@@ -102,7 +116,7 @@ onMounted(() => {
         display: flex;
         justify-content: space-between;
         width: 100%;
-        margin: 25px auto;
+        margin: 0px auto;
     }
 
     .address-form-1 select,
@@ -129,5 +143,10 @@ onMounted(() => {
         padding: 15px 20px;
         width: 120px;
         font-size: 16px;
+    }
+
+    .sex-text {
+        font-size: 20px;
+        color: white;
     }
 </style>
