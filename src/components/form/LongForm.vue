@@ -1,21 +1,46 @@
 <template>
-    <div class="long-form">
-        <span v-if="icon" class="material-symbols-outlined">{{ icon }}</span>
-        <input
-            :placeholder="placeholder"
-            :value="modalValue"
-            @input="$emit('update:modalValue', $event.target.value)"
-        >        
-    </div>
+  <div class="long-form">
+    <span v-if="icon" class="material-symbols-outlined">{{ icon }}</span>
+    <input
+      :placeholder="placeholder"
+      :value="modelValue || ''"
+      :type="type"
+      @input="onInput"
+      :class="{'input-error': error}"
+    />
+  </div>
 </template>
 
 <script setup>
-import { defineProps} from 'vue';
- defineProps({
-    placeholder: String,
-    modalValue: String,
-    icon: String,
- })
+import { defineProps, defineEmits } from 'vue';
+
+defineProps({
+  placeholder: String,
+  modelValue: String,
+  icon: String,
+  type: {
+    type: String,
+    default: 'text',
+  },
+  error: {
+    type: Boolean,
+    default: false,
+  }
+});
+
+
+const emit = defineEmits(['update:modelValue']);
+
+// const isEmailValid = computed(() => {
+//     if (props.type !== 'email') return true;
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     return emailRegex.test(props.modalValue || '');
+// });
+
+function onInput(event) {
+    emit('update:modelValue', event.target.value);
+}
+
 </script>
 
 <style scoped>
@@ -51,5 +76,9 @@ import { defineProps} from 'vue';
             'GRAD' 0,
             'opsz' 24;
         font-size: 28px;
+    }
+
+    .long-form input.input-error {
+        color: red !important;
     }
 </style>

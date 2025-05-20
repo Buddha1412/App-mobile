@@ -4,7 +4,7 @@ import UserForms from '../views/UserForms.vue';
 
 const routes = [
   {
-    path: '/userform',
+    path: '/',
     name: 'UserForms',
     component: UserForms
   },

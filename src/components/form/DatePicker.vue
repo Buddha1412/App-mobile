@@ -10,7 +10,5 @@ import DatePicker from '@vuepic/vue-datepicker';
 </script>
 
 <style>
-    .custom-date-picker {
-        border-radius: 10px;
-    }
+    
 </style>

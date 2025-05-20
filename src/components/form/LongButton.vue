@@ -1,24 +1,17 @@
 <template>
     <div class="long-btn">
-        <button @click="navigateToHomepage"><a>{{ text }}</a></button>
+        <button @click="$emit('click')"><a>{{ text }}</a></button>
     </div>
 </template>
 
 <script setup>
-    import { defineProps } from 'vue'
-    import { useRouter } from 'vue-router'
+    import { defineProps, defineEmits } from 'vue'
     defineProps(
         {
             text: String
         }
     )
-
-    const router = useRouter();
-
-    const navigateToHomepage = () => {
-        console.log('dothis')
-        router.push('/homepage');
-    }
+    defineEmits(['click'])
 </script>
 
 <style>
