@@ -6,23 +6,66 @@
 
         <div class="information-form">
             <div><TextForm text="Firstname"/></div>
-            <div><LongForm v-model="customer.firstname" placeholder="Firstname" icon="account_circle" type="text"/></div>
-            <div><TextForm text="Lastname"/></div>
-            <div><LongForm v-model="customer.lastname" placeholder="Lastname" icon="account_circle" type="text"/></div>
-            <div><TextForm text="Phone"/></div>
-            <div><LongForm v-model="phone" placeholder="Phone Number" icon="call" type="tel"/></div>
-            <div><TextForm text="Email"/></div>
-            <div><LongForm v-model="customer.email" placeholder="Email" icon="email" type="email"/></div>
+            <div>
+                <LongForm 
+                    v-model="customer.firstname" 
+                    placeholder="Firstname" 
+                    icon="account_circle" 
+                    type="text"
+                    pattern="^[A-Za-z]{2,}$"
+                />
+            </div>
+            <div>
+                <TextForm text="Lastname"/>
+            </div>
+            <div>
+                <LongForm 
+                    v-model="customer.lastname" 
+                    placeholder="Lastname" 
+                    icon="account_circle" 
+                    type="text"
+                    pattern="^[A-Za-z]{2,}$"
+                />
+            </div>
+            <div>
+                <TextForm text="Phone"/>
+            </div>
+            <div>
+                <LongForm 
+                    v-model="phone" 
+                    placeholder="Phone Number" 
+                    icon="call" 
+                    type="tel"
+                    pattern="^[0-9]{10}$"
+                />
+            </div>
+            <div>
+                <TextForm text="Email"/>
+            </div>
+            <div>
+                <LongForm 
+                    v-model="customer.email" 
+                    placeholder="Email" 
+                    icon="email" 
+                    type="email"
+                    pattern="\d{4}-\d{2}-\d{2} ([01]\d|2[0-3]):([0-5]\d)"
+                />
+            </div>
         </div>
 
         <div><TextForm text="Date"/></div>
-        <DatePicker v-model="customer.date" class="custom-date-picker" />
+        <DatePicker 
+            v-model="customer.date" 
+            class="custom-date-picker" 
+            type="text"
+            pattern="/^\d{4}-\d{2}-\d{2} ([01]\d|2[0-3]):([0-5]\d)$/"
+        />
 
         <div><TextForm text="Sex"/></div>
         <div class="sex-form">
-            <div><ShortForm v-model="sex.male" text="Male"/></div>
-            <div><ShortForm v-model="sex.female" text="Female"/></div>
-            <div><ShortForm v-model="sex.unisex" text="Unisex"/></div>
+            <div><ShortForm v-model="selectedSex" text="Male" value='male'/></div>
+            <div><ShortForm v-model="selectedSex" text="Female" value='female'/></div>
+            <div><ShortForm v-model="selectedSex" text="Unisex" value='unisex'/></div>
         </div>
 
         <div><TextForm text="Address"/></div>
@@ -32,7 +75,8 @@
                     v-model="customer.address" 
                     placeholder="Address" 
                     icon="home"
-                    type="email"
+                    type="text"
+                    
                 />
             </div>
         </div>
@@ -46,7 +90,7 @@
 
 <script setup>
 
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import LongForm from '../components/form/LongForm.vue'
 import MediumForm from '../components/form/MediumForm.vue'
 import ShortForm from '../components/form/ShortForm.vue'
@@ -56,7 +100,7 @@ import TextForm from '../components/form/TextForm.vue'
 import { useRouter } from 'vue-router'
 
 const customer = reactive({
-    name : '',
+    firstname : '',
     lastname : '',
     date : '',
     email : '',
@@ -64,47 +108,47 @@ const customer = reactive({
     address : ''
 })
 
-const sex = reactive({
-    male : '',
-    female : '',
-    unisex : '',
-})
+const selectedSex = ref('');
 
 const router = useRouter();
-
-// function isFirsNameValid(firstname) {
-//     na
-// }
-
-function isEmailValid(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-function isPhoneValid(phone) {
-    const phoneRegex = /^[0-9]{10}$/;
-    return phoneRegex.test(phone)
-}
 
 function handleClick() {
     const errors = [];
 
-    console.log(customer.email);
-    if(!isEmailValid(customer.email)) {
-        alert('Please enter a valid email address.');
-        return;
-    }
-    if (!isPhoneValid(customer.phone)) {
-        alert('Please enter a valid phone number.');
-        return;
-    }
+    const namePattern = /^[A-Za-z]{2,}$/;
+    const phonePattern = /^[0-9]{10}$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const dateTimePattern = /^\d{4}-\d{2}-\d{2} ([01]\d|2[0-3]):([0-5]\d)$/;
+    const addressPattern = /^[\w\s.,-]{5,}$/;
 
-    if (errors.length > 0) {
+    if (!namePattern.test(customer.firstname)) {
+        errors.push('Please enter a valid firstname (letters only, at least 2 characters).');
+    }
+    if (!namePattern.test(customer.lastname)) {
+        errors.push('Please enter a valid lastname (letters only, at least 2 characters).');
+    }
+    if (!phonePattern.test(customer.phone)) {
+        errors.push('Please enter a valid 10-digit phone number.');
+    }
+    if (!emailPattern.test(customer.email)) {
+        errors.push('Please enter a valid email address.');
+    }
+    if (!dateTimePattern.test(customer.date)) {
+        errors.push('Please enter a valid date.');
+    }
+    if (!addressPattern.test(customer.address)) {
+        errors.push('Please enter a valid home address.');
+    }
+    if (!selectedSex.value) {
+        alert('Please select a sex.');
+        return;
+    }
+    if (errors.length > 1) {
         alert(errors.join('\n'));
         return;
     }
-    
-    router.push('/homepage')
+
+    router.push('/homepage');
 }
 
 </script>
