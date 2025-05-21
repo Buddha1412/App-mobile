@@ -6,7 +6,6 @@
 
 <script setup>
 import DatePicker from '@vuepic/vue-datepicker';
-
 </script>
 
 <style>

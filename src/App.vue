@@ -17,7 +17,7 @@ watch(
       case 'HomePage':
         document.body.style.backgroundColor = '#fff';
         break;
-      case 'UserForms':
+      case 'Login':
         document.body.style.backgroundColor = '#ff3500';
         break;
       default:

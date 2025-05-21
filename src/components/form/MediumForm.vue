@@ -59,9 +59,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, defineEmits } from 'vue';
 import axios from 'axios';
 
+const emit = defineEmits(['update:province', 'update:district', 'update:subdistrict', 'update:postalcode'])
 
 const selectedProvince = ref('');
 const selectedDistrict = ref('');
@@ -71,6 +72,11 @@ const postalCode = ref('');
 const provinces = ref([]);
 const districts = ref([]);
 const subdistricts = ref([]);
+
+emit('update:province', selectedProvince);
+emit('update:district', selectedDistrict);
+emit('update:subdistrict', selectedSubdistrict);
+emit('update:postalcode', postalCode);
 
 async function fetchProvinces() {
     try {
