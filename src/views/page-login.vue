@@ -1,5 +1,4 @@
 <template>
-
     <PopupCheckError
         :showError="showError"
         :errorMessages="errorMessages"
@@ -183,7 +182,7 @@ function handleClick() {
         return;
     }
 
-    router.push('/homepage');
+    router.push('/page-homepage');
 }
 
 </script>

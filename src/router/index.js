@@ -1,23 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Login from '../views/Login.vue';
-import Homepage from '../views/Homepage.vue';
-import Template from '../views/Template.vue';
+import AppLogin from '../views/page-login.vue';
+import AppHomepage from '../views/page-homepage.vue';
+import AppTemplate from '../views/page-template.vue';
 
 const routes = [
   {
+    path: '/page-login',
+    name: 'AppLogin',
+    component: AppLogin
+  },
+  {
     path: '/',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/homepage',
     name: 'AppHomepage',
-    component: Homepage,
+    component: AppHomepage,
   },
   {
-    path: '/template',
+    path: '/page-template',
     name: 'AppTemplate',
-    component: Template,
+    component: AppTemplate,
   },
 ];
 

@@ -14,10 +14,13 @@ watch(
   () => route.name,
   (newRouteName) => {
     switch (newRouteName) {
-      case 'HomePage':
+      case 'AppHomepage':
         document.body.style.backgroundColor = '#fff';
         break;
-      case 'Login':
+      case 'AppTemplate':
+        document.body.style.backgroundColor = '#fff';
+        break;
+      case 'AppLogin':
         document.body.style.backgroundColor = '#ff3500';
         break;
       default:
