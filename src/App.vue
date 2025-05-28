@@ -1,6 +1,5 @@
 <template>
 <div>
-  
   <router-view v-slot="{ Component, route }">
     <component :is="Component" :key="route.path"/>
   </router-view>
@@ -8,12 +7,12 @@
 </template>
 
 <script setup>
-import { onMounted, watch, ref } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import liff from '@line/liff';
+import axios from 'axios';
 
 const route = useRoute();
-const nickname = ref('');
 
 watch(
   () => route.name,
@@ -38,10 +37,24 @@ watch(
 
 onMounted(async () => {
   if (liff.isLoggedIn()) {
+    liff.login();
+    return
+  }
+  try {
     const profile = await liff.getProfile()
-    nickname.value = profile.displayName;
-    }
+    const idToken = liff.getDecodedIDToken()
+
+    await axios.post('http://app-mobile-hjxy.vercel.app', {
+      userId: idToken.sub,
+      name: profile.displayName,
+      email: idToken.email || ''
+    })
+
+    console.log('User data sent to backend')
+  } catch (err) {
+    console.error('Error sending user data:', err)
+  }
 })
-  
+
 </script>
 
