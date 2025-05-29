@@ -70,6 +70,7 @@
             <div><ShortForm :modelValue="selectedSex" @update:modelValue="selectedSex = $event" text="Female" value='female'/></div>
             <div><ShortForm :modelValue="selectedSex" @update:modelValue="selectedSex = $event" text="Unisex" value='unisex'/></div>
         </div>
+        
         {{ selectedSex }}
 
         <div><TextForm text="Address"/></div>
@@ -83,7 +84,12 @@
                 />
             </div>
         </div>
-
+        <div class="sex-form">
+            <div><ShortForm :modelValue="selectedSex" @update:modelValue="selectedSex = $event" text="Male" value='male'/></div>
+            <div><ShortForm :modelValue="selectedSex" @update:modelValue="selectedSex = $event" text="Female" value='female'/></div>
+            <div><ShortForm :modelValue="selectedSex" @update:modelValue="selectedSex = $event" text="Unisex" value='unisex'/></div>
+        </div>
+        
         <div>
             <MediumForm
                 @update:province="customer.province = $event"

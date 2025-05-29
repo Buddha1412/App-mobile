@@ -49,7 +49,7 @@ const userProfile = userLineUserStore()
 onMounted(async () => {
   if (!liff.isLoggedIn()) {
     liff.login();
-    
+    return;
   }
   try {
     const profile = await liff.getProfile();
