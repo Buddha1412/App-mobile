@@ -11,9 +11,10 @@ import { ref, onMounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import liff from '@line/liff';
 // import axios from 'axios';
+import { useLineUserStore } from './stores/lineUser';
 
 const route = useRoute();
-const userProfile = ref(null);
+const lineUser = userLineStore();
 
 watch(
   () => route.name,
@@ -36,27 +37,4 @@ watch(
   { immediate: true }
 );
 
-onMounted(async () => {
-  if (!liff.isLoggedIn()) {
-    liff.login();
-  }
-  try {
-    
-    const profile = await liff.getProfile();
-    console.log(profile)
-    const idToken = liff.getDecodedIDToken()
-    userProfile.value = {
-      displayName: profile.displayName,
-      pictureUrl: profile.pictureUrl,
-      userId: profile.userId,
-      email: idToken.email || ''
-    }
-  } catch (error) {
-    console.error('Error during LIFF initialization:', error);
-    alert('Failed to initialize LIFF. Please try again.');
-  }
-});
-
-provide('userProfile', userProfile)
 </script>
-
