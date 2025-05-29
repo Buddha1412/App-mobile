@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, provide } from 'vue';
+import { onMounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import liff from '@line/liff';
 // import axios from 'axios';
