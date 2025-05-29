@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const { db } = require('./firebase');
@@ -14,7 +13,7 @@ app.post('/save-user', async (req, res) => {
   }
 
   try {
-    await db.collection('users').doc(userId).set(
+    await db.collection('user_information').doc(userId).set(
       {
         name,
         picture,

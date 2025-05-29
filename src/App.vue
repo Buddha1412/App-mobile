@@ -7,12 +7,13 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from 'vue';
+import { ref, onMounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import liff from '@line/liff';
-import axios from 'axios';
+// import axios from 'axios';
 
 const route = useRoute();
+const userProfile = ref(null);
 
 watch(
   () => route.name,
@@ -36,25 +37,26 @@ watch(
 );
 
 onMounted(async () => {
-  if (liff.isLoggedIn()) {
+  if (!liff.isLoggedIn()) {
     liff.login();
-    return
   }
   try {
-    const profile = await liff.getProfile()
+    
+    const profile = await liff.getProfile();
+    console.log(profile)
     const idToken = liff.getDecodedIDToken()
-
-    await axios.post('http://app-mobile-hjxy.vercel.app', {
-      userId: idToken.sub,
-      name: profile.displayName,
+    userProfile.value = {
+      displayName: profile.displayName,
+      pictureUrl: profile.pictureUrl,
+      userId: profile.userId,
       email: idToken.email || ''
-    })
-
-    console.log('User data sent to backend')
-  } catch (err) {
-    console.error('Error sending user data:', err)
+    }
+  } catch (error) {
+    console.error('Error during LIFF initialization:', error);
+    alert('Failed to initialize LIFF. Please try again.');
   }
-})
+});
 
+provide('userProfile', userProfile)
 </script>
 

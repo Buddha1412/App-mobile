@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 import router from './router'
@@ -11,14 +12,12 @@ liff.init({ liffId })
   .then(() => {
     if (!liff.isLoggedIn()) {
       liff.login()
-    } else {
-      app.use(router)
-      app.mount('#app')
-    }
+      return
+    } 
+    app.use(createPinia())
+    app.use(router)
+    app.mount('#app')
   })
   .catch((error) => {
     console.error('LIFF initialization failed', error)
-    
-    app.use(router)
-    app.mount('#app')
   })
