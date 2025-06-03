@@ -1,23 +1,22 @@
 <template>
-    
-    <div class="slider-container">
-        <input type="text" v-model="input" placeholder="Search fruits..." />
-    <div class="item fruit" v-for="fruit in filteredList()" :key="fruit">
-        <p>{{ fruit }}</p>
+  <div class="slider-container">
+    <input type="text" v-model="input.value" placeholder="Search fruits..." />
+    <div class="item fruit" v-for="fruit in filteredList" :key="fruit">
+      <p>{{ fruit }}</p>
     </div>
-    <div class="item error" v-if="input&&!filteredList().length">
-        <p>No results found!</p>
+    <div class="item error" v-if="input.value && !filteredList.length">
+      <p>No results found!</p>
     </div>
-        <br>
-        <div class="slider-event">
-            <SliderEvent/>
-        </div>
-        <div class="slider-event">
-            <SliderEvent/>
-        </div>
-        <br>
-        <div class="slider-product">
-            <SliderProduct/>
+    <br>
+    <div class="slider-event">
+      <SliderEvent/>
+    </div>
+    <div class="slider-event">
+      <SliderEvent/>
+    </div>
+    <br>
+    <div class="slider-product">
+      <SliderProduct/>
     </div>
     <div class="line-user-info" v-if="userProfile.displayName">
       <img :src="userProfile.pictureUrl" alt="Profile Picture" class="profile-pic" />
@@ -25,42 +24,40 @@
       <p>User ID: {{ userProfile.userId }}</p>
       <p>Email: {{ userProfile.email }}</p>
     </div>
-    </div>
+  </div>
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, computed } from 'vue'
 import SliderEvent from '../components/slider/SliderEvent.vue'
 import SliderProduct from '../components/slider/SliderProduct.vue'
-import { userLineUserStore } from '@/stores/lineUser.js'
+import { useLineUserStore } from '@/stores/lineUser.js'
 import liff from '@line/liff'
 
-let input = reactive({
+const input = reactive({
   value: ''
 })
 
-const fruits = ['Apple', 'Banana', 'Cherry'];
-function filteredList() {
-  return fruits.filter((fruit) => fruit.toLowerCase().includes(input.value.toLowerCase()));
-}
+const fruits = ['Apple', 'Banana', 'Cherry']
+const filteredList = computed(() =>
+  fruits.filter((fruit) => fruit.toLowerCase().includes(input.value.toLowerCase()))
+)
 
-const userProfile = userLineUserStore()
+const userProfile = useLineUserStore()
 
 onMounted(async () => {
   if (!liff.isLoggedIn()) {
-    liff.login();
-    return;
+    liff.login()
   }
   try {
-    const profile = await liff.getProfile();
+    const profile = await liff.getProfile()
     const idToken = liff.getDecodedIDToken()
     userProfile.setUser(profile, idToken)
   } catch (error) {
-    console.error('Error during LIFF initialization:', error);
-    alert('Failed to initialize LIFF. Please try again.');
+    console.error('Error during LIFF initialization:', error)
+    alert('Failed to initialize LIFF. Please try again.')
   }
-});
-
+})
 </script>
 
 <style scoped>
