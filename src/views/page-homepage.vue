@@ -31,7 +31,6 @@
 import { onMounted, reactive, computed } from 'vue'
 import SliderEvent from '../components/slider/SliderEvent.vue'
 import SliderProduct from '../components/slider/SliderProduct.vue'
-import { useLineUserStore } from '@/stores/lineUser.js'
 import liff from '@line/liff'
 
 const input = reactive({
@@ -43,17 +42,10 @@ const filteredList = computed(() =>
   fruits.filter((fruit) => fruit.toLowerCase().includes(input.value.toLowerCase()))
 )
 
-const userProfile = useLineUserStore()
-
 onMounted(async () => {
     try {
         await liff.init({ liffId: '2007300744-prPq3P8b' })
         if (!liff.isLoggedIn()) {
-            liff.login
-            // ({
-            //     redirectUri: window.location.origin + '/page-homepage' 
-            // })
-        } else {
             liff.login()
         }
     } catch (error) {
