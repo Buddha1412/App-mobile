@@ -46,18 +46,22 @@ const filteredList = computed(() =>
 const userProfile = useLineUserStore()
 
 onMounted(async () => {
-  if (!liff.isLoggedIn()) {
-    liff.login()
-  }
-  try {
-    const profile = await liff.getProfile()
-    const idToken = liff.getDecodedIDToken()
-    userProfile.setUser(profile, idToken)
-  } catch (error) {
-    console.error('Error during LIFF initialization:', error)
-    alert('Failed to initialize LIFF. Please try again.')
-  }
+    try {
+        await liff.init({ liffId: '2007300744-prPq3P8b' })
+        if (!liff.isLoggedIn()) {
+            liff.login
+            // ({
+            //     redirectUri: window.location.origin + '/page-homepage' 
+            // })
+        } else {
+            liff.login()
+        }
+    } catch (error) {
+        console.error('Error during LIFF initialization:', error)
+        alert('Failed to initialize LIFF. Please try again.')
+    }
 })
+
 </script>
 
 <style scoped>
