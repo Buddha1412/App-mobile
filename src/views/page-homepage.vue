@@ -75,6 +75,7 @@ function scrollToTopic(topic) {
 }
 
 const userProfile = reactive({
+
   displayName: '',
   pictureUrl: '',
   userId: '',
@@ -92,7 +93,7 @@ onMounted(async () => {
         console.log('LIFF is not logged in, redirecting to login...')
       liff.login({
          scope: 'profile openid',
-        redirectUri: window.location.href 
+        redirectUri: 'https://benz-mobile.vercel.app/'
       })
       
     } else {
