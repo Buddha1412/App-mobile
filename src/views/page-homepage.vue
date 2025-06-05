@@ -93,6 +93,7 @@ onMounted(async () => {
       return
     }
     const profile = await liff.getProfile()
+    console.log('LINE Profile:', profile)
     userProfile.displayName = profile.displayName
     userProfile.pictureUrl = profile.pictureUrl
     userProfile.userId = profile.userId
