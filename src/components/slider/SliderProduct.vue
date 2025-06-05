@@ -288,7 +288,7 @@ body {
 }
 
 .swiper {
-  width: 100%;
+  width: 91%;
   height: 105vw;
 }
 

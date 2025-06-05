@@ -1,59 +1,106 @@
 <template>
   <div class="slider-container">
-    <input type="text" v-model="input.value" placeholder="Search fruits..." />
-    <div class="item fruit" v-for="fruit in filteredList" :key="fruit">
-      <p>{{ fruit }}</p>
-    </div>
-    <div class="item error" v-if="input.value && !filteredList.length">
-      <p>No results found!</p>
+    <div class="slider-header">
+      <input type="text" v-model="input.value" placeholder="Search topics..." />
+      <div v-if="input.value">
+        <!-- Search results: only filteredList -->
+        <div
+          class="item-topic-search"
+          v-for="topic in filteredList"
+          :key="topic"
+          @click="scrollToTopic(topic)"
+        >
+          <p>{{ topic }}</p>
+        </div>
+        <div class="item-error" v-if="input.value && !filteredList.length">
+          <p>No results found!</p>
+        </div>
+      </div>
     </div>
     <br>
-    <div class="slider-event">
-      <SliderEvent/>
-    </div>
-    <div class="slider-event">
-      <SliderEvent/>
-    </div>
-    <br>
-    <div class="slider-product">
-      <SliderProduct/>
-    </div>
-    <div class="line-user-info" v-if="userProfile.displayName">
+    <!-- <div class="line-user-info" v-if="userProfile.displayName">
       <img :src="userProfile.pictureUrl" alt="Profile Picture" class="profile-pic" />
       <h1>{{ userProfile.displayName }}</h1>
       <p>User ID: {{ userProfile.userId }}</p>
       <p>Email: {{ userProfile.email }}</p>
+    </div> -->
+    <!-- Main topic sections: always render all topics -->
+    <div ref="slideEventRef" class="item-topic">
+      <div class="slider-event">
+        <SliderEvent :topic="'SlideEvent'"/>
+      </div>
+    </div>
+    <br>
+    <div ref="slideProduct1Ref" class="item-topic">
+      <div class="slider-product-1">
+        <SliderProduct :topic="'SlideProduct-1'"/>
+      </div>
+    </div>
+    <br>
+    <div ref="slideProduct2Ref" class="item-topic">
+      <div class="slider-product-2">
+        <SliderProduct :topic="'SlideProduct-2'"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, reactive, computed } from 'vue'
+import { onMounted, reactive, computed, ref } from 'vue'
 import SliderEvent from '../components/slider/SliderEvent.vue'
 import SliderProduct from '../components/slider/SliderProduct.vue'
 import liff from '@line/liff'
 
-const input = reactive({
-  value: ''
-})
-
-const fruits = ['Apple', 'Banana', 'Cherry']
+const input = reactive({ value: '' })
+const topics = ['SlideEvent', 'SlideProduct-1', 'SlideProduct-2']
 const filteredList = computed(() =>
-  fruits.filter((fruit) => fruit.toLowerCase().includes(input.value.toLowerCase()))
+  topics.filter((topic) => topic.toLowerCase().includes(input.value.toLowerCase()))
 )
 
-onMounted(async () => {
-    try {
-        await liff.init({ liffId: '2007300744-prPq3P8b' })
-        if (!liff.isLoggedIn()) {
-            liff.login()
-        }
-    } catch (error) {
-        console.error('Error during LIFF initialization:', error)
-        alert('Failed to initialize LIFF. Please try again.')
-    }
-})
+const slideEventRef = ref(null)
+const slideProduct1Ref = ref(null)
+const slideProduct2Ref = ref(null)
 
+function scrollToTopic(topic) {
+let el = null
+  if (topic === 'SlideEvent') el = slideEventRef.value
+  if (topic === 'SlideProduct-1') el = slideProduct1Ref.value
+  if (topic === 'SlideProduct-2') el = slideProduct2Ref.value
+  if (el && typeof el.scrollIntoView === 'function') {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
+// const userProfile = reactive({
+//   displayName: '',
+//   pictureUrl: '',
+//   userId: '',
+//   email: ''
+// })
+
+onMounted(async () => {
+     console.log('User is logged in')
+  try {
+    await liff.init({ liffId: '2007300744-prPq3P8b' })
+     console.log('User is already logged :' + liff.isLoggedIn() )
+    if (!liff.isLoggedIn()) {
+        liff.login()
+        console.log('LIFF initialized successfully')
+      return
+    }
+    // {
+    //         redirectUri: window.location.origin + '/'        
+    //   }
+    // const profile = await liff.getProfile()
+    // userProfile.displayName = profile.displayName
+    // userProfile.pictureUrl = profile.pictureUrl
+    // userProfile.userId = profile.userId
+    // const idToken = liff.getDecodedIDToken()
+    // userProfile.email = idToken?.email || ''
+  } catch (error) {
+    console.error('Error during LIFF initialization:', error)
+  }
+})
 </script>
 
 <style scoped>
@@ -94,5 +141,25 @@ onMounted(async () => {
   color: #555;
   font-size: 1rem;
   word-break: break-all;
+}
+
+.slider-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.item-topic-search {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px 0;
+  width: 200px;
+  text-align: center;
+}
+
+.slider-product-2 {
+    height: 0px;
 }
 </style>

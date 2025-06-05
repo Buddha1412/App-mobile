@@ -9,12 +9,12 @@
 <script setup>
 // import { onMounted, watch, provide } from 'vue';
 import { watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 // import liff from '@line/liff';
 // import axios from 'axios';
 // import { useLineUserStore } from './stores/lineUser';
 
-const route = useRoute();
+const route = useRouter();
 // const lineUser = userLineStore();
 
 watch(
