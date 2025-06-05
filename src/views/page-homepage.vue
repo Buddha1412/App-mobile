@@ -18,12 +18,12 @@
       </div>
     </div>
     <br>
-    <!-- <div class="line-user-info" v-if="userProfile.displayName">
+    <div class="line-user-info" v-if="userProfile.displayName">
       <img :src="userProfile.pictureUrl" alt="Profile Picture" class="profile-pic" />
       <h1>{{ userProfile.displayName }}</h1>
       <p>User ID: {{ userProfile.userId }}</p>
       <p>Email: {{ userProfile.email }}</p>
-    </div> -->
+    </div>
     <!-- Main topic sections: always render all topics -->
     <div ref="slideEventRef" class="item-topic">
       <div class="slider-event">
@@ -71,12 +71,12 @@ let el = null
   }
 }
 
-// const userProfile = reactive({
-//   displayName: '',
-//   pictureUrl: '',
-//   userId: '',
-//   email: ''
-// })
+const userProfile = reactive({
+  displayName: '',
+  pictureUrl: '',
+  userId: '',
+  email: ''
+})
 
 onMounted(async () => {
      console.log('User is logged in')
@@ -84,19 +84,21 @@ onMounted(async () => {
     await liff.init({ liffId: '2007300744-prPq3P8b' })
      console.log('User is already logged :' + liff.isLoggedIn() )
     if (!liff.isLoggedIn()) {
-        liff.login()
+        liff.login({
+            redirectUri: window.location.origin + '/homepage'
+        })
         console.log('LIFF initialized successfully')
       return
     }
     // {
     //         redirectUri: window.location.origin + '/'        
     //   }
-    // const profile = await liff.getProfile()
-    // userProfile.displayName = profile.displayName
-    // userProfile.pictureUrl = profile.pictureUrl
-    // userProfile.userId = profile.userId
-    // const idToken = liff.getDecodedIDToken()
-    // userProfile.email = idToken?.email || ''
+    const profile = await liff.getProfile()
+    userProfile.displayName = profile.displayName
+    userProfile.pictureUrl = profile.pictureUrl
+    userProfile.userId = profile.userId
+    const idToken = liff.getDecodedIDToken()
+    userProfile.email = idToken?.email || ''
   } catch (error) {
     console.error('Error during LIFF initialization:', error)
   }
@@ -156,7 +158,6 @@ onMounted(async () => {
   border-radius: 5px;
   margin: 5px 0;
   width: 200px;
-  cursor: pointer;
   text-align: center;
 }
 
