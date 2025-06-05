@@ -91,7 +91,8 @@ onMounted(async () => {
     if (!liff.isLoggedIn()) {
         console.log('LIFF is not logged in, redirecting to login...')
       liff.login({
-        
+         scope: 'profile openid',
+        redirectUri: window.location.href 
       })
       
     } else {
