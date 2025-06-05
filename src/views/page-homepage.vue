@@ -85,18 +85,25 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
+    console.log('Initializing LIFF...')
     await liff.init({ liffId: '2007300744-prPq3P8b' })
+    console.log('LIFF initialized successfully')
     if (!liff.isLoggedIn()) {
+        console.log('LIFF is not logged in, redirecting to login...')
       liff.login({
         redirectUri: 'https://benz-mobile.vercel.app/'
       })
       return
     }
+    console.log('LIFF is logged in, fetching profile...')
     const profile = await liff.getProfile()
+    console.log('LIFF isLoggedIn:', liff.isLoggedIn())
     console.log('LINE Profile:', profile)
+    console.log('Decoded ID Token:', idToken)
     userProfile.displayName = profile.displayName
     userProfile.pictureUrl = profile.pictureUrl
     userProfile.userId = profile.userId
+    console.log('User Profile:', userProfile)
     const idToken = liff.getDecodedIDToken()
     userProfile.email = idToken?.email || ''
   } catch (error) {
