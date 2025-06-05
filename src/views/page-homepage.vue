@@ -156,6 +156,7 @@ onMounted(async () => {
   border-radius: 5px;
   margin: 5px 0;
   width: 200px;
+  cursor: pointer;
   text-align: center;
 }
 
