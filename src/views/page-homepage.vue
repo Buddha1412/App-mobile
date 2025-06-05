@@ -1,47 +1,50 @@
 <template>
   <div class="slider-container">
-    <div class="slider-header">
-      <input type="text" v-model="input.value" placeholder="Search topics..." />
-      <div v-if="input.value">
-        <!-- Search results: only filteredList -->
-        <div
-          class="item-topic-search"
-          v-for="topic in filteredList"
-          :key="topic"
-          @click="scrollToTopic(topic)"
-        >
-          <p>{{ topic }}</p>
+    <div v-if="loading"></div>
+    <template v-else>
+      <div class="slider-header">
+        <input type="text" v-model="input.value" placeholder="Search topics..." />
+        <div v-if="input.value">
+          <!-- Search results: only filteredList -->
+          <div
+            class="item-topic-search"
+            v-for="topic in filteredList"
+            :key="topic"
+            @click="scrollToTopic(topic)"
+          >
+            <p>{{ topic }}</p>
+          </div>
+          <div class="item-error" v-if="input.value && !filteredList.length">
+            <p>No results found!</p>
+          </div>
         </div>
-        <div class="item-error" v-if="input.value && !filteredList.length">
-          <p>No results found!</p>
+      </div>
+      <br>
+      <div class="line-user-info" v-if="userProfile.displayName">
+        <img :src="userProfile.pictureUrl" alt="Profile Picture" class="profile-pic" />
+        <h1>{{ userProfile.displayName }}</h1>
+        <p>User ID: {{ userProfile.userId }}</p>
+        <p>Email: {{ userProfile.email }}</p>
+      </div>
+      <!-- Main topic sections: always render all topics -->
+      <div ref="slideEventRef" class="item-topic">
+        <div class="slider-event">
+          <SliderEvent :topic="'SlideEvent'"/>
         </div>
       </div>
-    </div>
-    <br>
-    <div class="line-user-info" v-if="userProfile.displayName">
-      <img :src="userProfile.pictureUrl" alt="Profile Picture" class="profile-pic" />
-      <h1>{{ userProfile.displayName }}</h1>
-      <p>User ID: {{ userProfile.userId }}</p>
-      <p>Email: {{ userProfile.email }}</p>
-    </div>
-    <!-- Main topic sections: always render all topics -->
-    <div ref="slideEventRef" class="item-topic">
-      <div class="slider-event">
-        <SliderEvent :topic="'SlideEvent'"/>
+      <br>
+      <div ref="slideProduct1Ref" class="item-topic">
+        <div class="slider-product-1">
+          <SliderProduct :topic="'SlideProduct-1'"/>
+        </div>
       </div>
-    </div>
-    <br>
-    <div ref="slideProduct1Ref" class="item-topic">
-      <div class="slider-product-1">
-        <SliderProduct :topic="'SlideProduct-1'"/>
+      <br>
+      <div ref="slideProduct2Ref" class="item-topic">
+        <div class="slider-product-2">
+          <SliderProduct :topic="'SlideProduct-2'"/>
+        </div>
       </div>
-    </div>
-    <br>
-    <div ref="slideProduct2Ref" class="item-topic">
-      <div class="slider-product-2">
-        <SliderProduct :topic="'SlideProduct-2'"/>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -62,7 +65,7 @@ const slideProduct1Ref = ref(null)
 const slideProduct2Ref = ref(null)
 
 function scrollToTopic(topic) {
-let el = null
+  let el = null
   if (topic === 'SlideEvent') el = slideEventRef.value
   if (topic === 'SlideProduct-1') el = slideProduct1Ref.value
   if (topic === 'SlideProduct-2') el = slideProduct2Ref.value
@@ -81,15 +84,12 @@ const userProfile = reactive({
 const loading = ref(true)
 
 onMounted(async () => {
-     console.log('User is logged in')
   try {
     await liff.init({ liffId: '2007300744-prPq3P8b' })
-     console.log('User is already logged :' + liff.isLoggedIn() )
     if (!liff.isLoggedIn()) {
-        liff.login({
-            redirectUri: 'https://benz-mobile.vercel.app/'
-        })
-        console.log('LIFF initialized successfully')
+      liff.login({
+        redirectUri: 'https://benz-mobile.vercel.app/'
+      })
       return
     }
     const profile = await liff.getProfile()
