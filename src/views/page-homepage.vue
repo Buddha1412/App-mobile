@@ -78,6 +78,8 @@ const userProfile = reactive({
   email: ''
 })
 
+const loading = ref(true)
+
 onMounted(async () => {
      console.log('User is logged in')
   try {
@@ -85,14 +87,11 @@ onMounted(async () => {
      console.log('User is already logged :' + liff.isLoggedIn() )
     if (!liff.isLoggedIn()) {
         liff.login({
-            redirectUri: window.location.origin + '/homepage'
+            redirectUri: 'https://benz-mobile.vercel.app/'
         })
         console.log('LIFF initialized successfully')
       return
     }
-    // {
-    //         redirectUri: window.location.origin + '/'        
-    //   }
     const profile = await liff.getProfile()
     userProfile.displayName = profile.displayName
     userProfile.pictureUrl = profile.pictureUrl
@@ -101,6 +100,8 @@ onMounted(async () => {
     userProfile.email = idToken?.email || ''
   } catch (error) {
     console.error('Error during LIFF initialization:', error)
+  } finally {
+    loading.value = false
   }
 })
 </script>
