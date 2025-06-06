@@ -83,24 +83,27 @@ const userProfile = reactive({
 })
 
 const loading = ref(true)
+const main = ref(null)
 
-onMounted(async () => {
+onMounted(main.value = async () => {
   try {
     console.log('Initializing LIFF...')
     await liff.init({ liffId: '2007300744-prPq3P8b' })
     console.log('LIFF initialized successfully')
+
+    const context = liff.getContext();
+    console.log(context);
     if (!liff.isLoggedIn()) {
         console.log('LIFF is not logged in, redirecting to login...')
       liff.login({
-         scope: 'profile openid',
+        scope: 'profile openid',
         redirectUri: 'https://benz-mobile.vercel.app/'
-      })
-      
+    })
     } else {
         console.log('LIFF is logged in, fetching profile...')
-        const profile = await liff.getProfile()
+        // const profile = await liff.getProfile()
         // console.log('LIFF isLoggedIn:', liff.isLoggedIn())
-        console.log('LINE Profile:', profile)
+        // console.log('LINE Profile:', profile)
         // console.log('Decoded ID Token:', idToken)
         // userProfile.displayName = profile.displayName
         // userProfile.pictureUrl = profile.pictureUrl
